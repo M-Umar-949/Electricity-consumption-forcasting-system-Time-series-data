@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecasting System Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow-y: scroll;
+        }
+        .container {
+            text-align: center;
+            position:fixed;
+        }
+        select, input, button {
+            padding: 10px;
+            margin: 10px;
+            background-color: #555;
+            border: none;
+            color: #ddd;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        input[type="number"] {
+            width: 50%;
+        }
+        button:hover {
+            background-color: #16b563;
+        }
+        #forecastChart {
+            width: 100%;
+            max-width: 600px;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10%;
+            margin-left: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="dashboardBtn" type="button">Dashboard</button>
+
+        <h1>Hourly electricity consumption forecasting System</h1>
+        <form action="/forecast" method="post">
+            <input type="number" name="hours" min="1" placeholder="Enter number of hours">
+            <select name="model-selector">
+                <option value="">Select Model</option>
+                <option value="ANN">ANN</option>
+                <option value="ARIMA">ARIMA</option>
+                <option value="ETS">ETS</option>
+                <option value="LSTM">LSTM</option>
+                <option value="PROPHET">PROPHET</option>
+                <option value="SARIMA">SARIMA</option>
+                <option value="SVR">SVR</option>
+                <option value="HYBRID">HYBRID</option>
+            </select>
+            <button type="submit">Run Forecast</button>
+        </form>
+        <div id="results">
+            <!-- Results will be displayed here -->
+        </div>
+        <canvas id="forecastChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const resultsDiv = document.getElementById('results');
+        let forecastChart;  // Reference to Chart.js instance
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            fetch('/forecast', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    return;
+                }
+
+    
+                resultsDiv.innerHTML = '';
+                // Create a table to display the labels and data
+
+
+                if (!forecastChart) {
+                    const ctx = document.getElementById('forecastChart').getContext('2d');
+                    forecastChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Forecast Data',
+                                data: data.forecasts,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                fill: 'start'
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+
+                    });
+
+                } else {
+                    forecastChart.data.labels = data.labels;
+                    forecastChart.data.datasets[0].data = data.forecasts;
+                    forecastChart.update();
+                }
+                // let tableHTML = '<table style="text-align:center; margin-left:17% "><thead><tr><th>Label</th><th>Data</th></tr></thead><tbody>';
+                // for (let i = 0; i < data.labels.length; i++) {
+                //     tableHTML += `<tr><td>${data.labels[i]}</td><td>${data.forecasts[i]}</td></tr>`;
+                // }
+                // tableHTML += '</tbody></table>';
+
+                // Append the table to the resultsDiv
+                resultsDiv.innerHTML += tableHTML;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+    const dashboardBtn = document.getElementById('dashboardBtn'); // Get the button by its id
+
+    // Add click event listener to the dashboard button
+    dashboardBtn.addEventListener('click', function() {
+        window.location.href = '/dashboard'; // Navigate to /dashboard
+    });
+
+    // Rest of your code for form submission and chart generation...
+});
+
+
+    </script>
+</body>
+</html>
