@@ -58,5 +58,5 @@ We integrated the trained models with a frontend interface. Users can select the
 
 1. **Clone the repository**:
    ```bash
- [  git clone https://github.com/yourusername/your-repo-name.git](https://github.com/M-Umar-949/Electricity-consumption-forcasting-system-Time-series-data.git)
+   git clone https://github.com/M-Umar-949/Electricity-consumption-forcasting-system-Time-series-data.git
    cd Electricity-consumption-forcasting-system-Time-series-data
