@@ -60,3 +60,5 @@ We integrated the trained models with a frontend interface. Users can select the
    ```bash
    git clone https://github.com/M-Umar-949/Electricity-consumption-forcasting-system-Time-series-data.git
    cd Electricity-consumption-forcasting-system-Time-series-data
+
+ps: The weights of the ARIMA and SARIMA are not uploaded because they are large files. I will upload them on google drive later.
