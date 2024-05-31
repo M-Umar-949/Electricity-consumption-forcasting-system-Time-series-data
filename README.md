@@ -55,10 +55,10 @@ We trained several models to forecast electricity consumption:
 We integrated the trained models with a frontend interface. Users can select the number of forecasts and the model to use. The interface was built using d3.js and chart.js to create interactive visualizations of the dataset and predictions.
 
 ## Installation and Setup
-
-1. **Clone the repository**:
+**Clone the repository**:
    ```bash
    git clone https://github.com/M-Umar-949/Electricity-consumption-forcasting-system-Time-series-data.git
    cd Electricity-consumption-forcasting-system-Time-series-data
+   ```
 
 ps: The weights of the ARIMA and SARIMA are not uploaded because they are large files. I will upload them on google drive later.
